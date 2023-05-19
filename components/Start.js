@@ -8,8 +8,11 @@ import {
   ImageBackground,
 } from "react-native";
 import {KeyboardAvoidingView} from "react-native-gifted-chat";
+import { getAuth, signInAnonymously } from "firebase/auth";
+
 
 const Start = ({ navigation }) => {
+  const auth = getAuth();
   const [text, setText] = useState("");
   const [color, setColor] = useState("");
 

@@ -1,6 +1,33 @@
 import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, View, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  KeyboardAvoidingView,
+  FlatList
+} from "react-native";
 import { Bubble, GiftedChat } from "react-native-gifted-chat";
+
+// import Firestore
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDfF0_PzEOxIRMWqVR_AuVPozK5-GABvok",
+  authDomain: "chatapp-17ef3.firebaseapp.com",
+  projectId: "chatapp-17ef3",
+  storageBucket: "chatapp-17ef3.appspot.com",
+  messagingSenderId: "244893236842",
+  appId: "1:244893236842:web:ca01b36403b9d7a0db1413"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
 
 const Chat = ({ route, navigation }) => {
   const { name, color } = route.params;

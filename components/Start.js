@@ -1,11 +1,12 @@
-import { useState } from "react";
+import React from "react";
 import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
+  Text,
+  Button,
+  TextInput,
+  StyleSheet,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import {KeyboardAvoidingView} from "react-native-gifted-chat";
 import { getAuth, signInAnonymously } from "firebase/auth";

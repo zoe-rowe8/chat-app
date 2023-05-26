@@ -8,114 +8,186 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import {KeyboardAvoidingView} from "react-native-gifted-chat";
-import { getAuth, signInAnonymously } from "firebase/auth";
 
+// an object of objects. When referenced in a "style" attribute, the backgroundColor is applied!
+const bgColors = {
+  black: { backgroundColor: "#000000" },
+  gray: { backgroundColor: "#8a95a5" },
+  purple: { backgroundColor: "#474056" },
+  green: { backgroundColor: "#94ae89" },
+};
 
-const Start = ({ navigation }) => {
-  const auth = getAuth();
-  const [text, setText] = useState("");
-  const [color, setColor] = useState("");
+export default class Start extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      bgColor: ""
+    };
+  }
 
-  return (
-    <ImageBackground
-      source={require("../assets/BackgroundImage.jpg")}
-      resizeMode='cover'
-      style={styles.backgroundImage}
-    >
-      <View style={styles.container}>
-        <View style={styles.subContainer}>
-          <Text style={styles.title}>Chat App!</Text>
-        </View>
-        <View style={styles.subContainer}>
+  render() {
+    // black = bgColors.black i.e., { backgroundColor: "#000000" }
+    const { black, gray, purple, green } = bgColors;
+    return (
+      <ImageBackground
+        source={require("../assets/BackgroundImage.jpg")}
+        style={[styles.container, styles.columnEvenlyCenter]}
+      >
+        <Text style={styles.title}>Chat Tack</Text>
+
+        <View style={[styles.nameInput__container, styles.columnEvenlyCenter]}>
           <TextInput
-            placeholder='Your name'
-            style={styles.input}
-            onChangeText={setText}
+            style={styles.nameInput__input}
+            onChangeText={(name) => this.setState({ name })} // state.name is the user's input value
+            value={this.state.name}
+            placeholder="Enter your Name"
           />
-          <Text>Choose Background Color</Text>
-          <View style={styles.radioButtonContainer}>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#ff5e5e" }]}
-              onPress={() => setColor("#ff5e5e")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#69cfff" }]}
-              onPress={() => setColor("#69cfff")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#54ffd4" }]}
-              onPress={() => setColor("#54ffd4")}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, { backgroundColor: "#fff869" }]}
-              onPress={() => setColor("#fff869")}
-            ></TouchableOpacity>
+
+          <View style={styles.colorSelect}>
+            <Text style={styles.colorSelect__text}>
+              Choose your Background:
+            </Text>
+            <View style={styles.colorSelect__dotsWrapper}>
+              <TouchableOpacity
+                style={[
+                  styles.colorSelect__dot,
+                  black,
+                  this.state.color === black.backgroundColor
+                    ? styles.colorSelect__dotSelected
+                    : {},
+                ]}
+                onPress={() => this.setState({ bgColor: black.backgroundColor })} // 
+              />
+
+              <TouchableOpacity
+                style={[
+                  styles.colorSelect__dot,
+                  gray,
+                  this.state.color === gray.backgroundColor
+                    ? styles.colorSelect__dotSelected
+                    : {},
+                ]}
+                onPress={() => this.setState({ bgColor: gray.backgroundColor })}
+              />
+
+              <TouchableOpacity
+                style={[
+                  styles.colorSelect__dot,
+                  purple,
+                  this.state.color === purple.backgroundColor
+                    ? styles.colorSelect__dotSelected
+                    : {},
+                ]}
+                onPress={() => this.setState({ bgColor: purple.backgroundColor })}
+              />
+
+              <TouchableOpacity
+                style={[
+                  styles.colorSelect__dot,
+                  green,
+                  this.state.color === green.backgroundColor
+                    ? styles.colorSelect__dotSelected
+                    : {},
+                ]}
+                onPress={() => this.setState({ bgColor: green.backgroundColor })}
+              />
+            </View>
           </View>
           <TouchableOpacity
-            style={styles.button}
+            style={styles.fauxButton}
             onPress={() =>
-              navigation.navigate("Chat", {
-                name: text ? text : "User",
-                color: color ? color : "white",
+              this.props.navigation.navigate("Chat", {
+                name: this.state.name || "no-name",
+                bgColor: this.state.bgColor || bgColors.gray.backgroundColor,
               })
             }
           >
-            <Text>Go to Chat</Text>
+            <Text style={[styles.colorSelect__text, styles.fauxButton__text]}>
+              Start Chatting
+            </Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </ImageBackground>
-  );
-};
+      </ImageBackground>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-  },
   container: {
     flex: 1,
+  },
+
+  columnEvenlyCenter: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "center",
   },
-  subContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "88%",
-    
-  },
-  radioButtonContainer: {
-    width: "70%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    margin: 20,
-  },
+
   title: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "white",
+    color: "#fff",
+    fontSize: 45,
+    fontWeight: "600",
   },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-  },
-  radioButton: {
-    backgroundColor: "black",
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-  },
-  input: {
-    height: 40,
+
+  nameInput__container: {
+    backgroundColor: "#fff",
+    height: "44%",
+    minHeight: 200,
     width: "88%",
-    margin: 12,
-    borderWidth: 3,
-    borderColor: "white",
-    padding: 10,
-    color: "white"
+  },
+
+  nameInput__input: {
+    height: 50,
+    width: "88%",
+    paddingLeft: 20,
+    borderColor: "gray",
+    borderWidth: 1,
+    color: "#757083",
+    opacity: 50,
+    fontSize: 16,
+    fontWeight: "300",
+  },
+
+  colorSelect: {
+    height: 75,
+  },
+
+  colorSelect__text: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "300",
+    color: "#757083",
+    opacity: 100,
+  },
+
+  colorSelect__dotsWrapper: {
+    flexDirection: "row",
+  },
+
+  colorSelect__dot: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    margin: 10,
+  },
+
+  colorSelect__dotSelected: {
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderColor: "#5f5f5f",
+  },
+
+  fauxButton: {
+    backgroundColor: "#757083",
+    justifyContent: "center",
+    width: "88%",
+    padding: 16,
+  },
+
+  fauxButton__text: {
+    color: "#fff",
+    fontWeight: "600",
   },
 });
-
-export default Start;
